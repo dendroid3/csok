@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSoK | Computer Society of Kimathi</title>
+    <meta
+      name="description"
+      content="Computer Society of Kimathi (CSoK) - Cyberpunk inspired student tech community website."
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              monohead: ['"Space Mono"', '"Courier New"', "monospace"],
+            },
+            boxShadow: {
+              neon: "0 0 0 1px rgba(34,197,94,0.4), 0 0 22px rgba(190,24,93,0.24)",
+              cyan: "0 0 0 1px rgba(190,24,93,0.52), 0 0 28px rgba(251,191,36,0.22)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        background-color: #020617;
+        background-image: radial-gradient(
+            circle at 12% 18%,
+            rgba(190, 24, 93, 0.18),
+            transparent 36%
+          ),
+          radial-gradient(
+            circle at 88% 78%,
+            rgba(34, 197, 94, 0.14),
+            transparent 34%
+          ),
+          radial-gradient(
+            circle at 52% 8%,
+            rgba(245, 158, 11, 0.1),
+            transparent 30%
+          ),
+          linear-gradient(180deg, #020617 0%, #000 100%);
+      }
+
+      .neon-depth {
+        filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
+      }
+
+      .glitch-hover {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .glitch-hover::before,
+      .glitch-hover::after {
+        content: attr(data-text);
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .glitch-hover:hover::before {
+        opacity: 0.65;
+        transform: translate(1px, -1px);
+        color: #e11d48;
+        clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%);
+      }
+
+      .glitch-hover:hover::after {
+        opacity: 0.65;
+        transform: translate(-1px, 1px);
+        color: #22c55e;
+        clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%);
+      }
+
+      @keyframes jitter {
+        0%,
+        100% {
+          transform: translateX(0) translateY(0);
+        }
+        25% {
+          transform: translateX(1px) translateY(-1px);
+        }
+        50% {
+          transform: translateX(-1px) translateY(0);
+        }
+        75% {
+          transform: translateX(2px) translateY(-1px);
+        }
+      }
+
+      .jitter-btn {
+        transition: all 180ms ease;
+      }
+
+      .jitter-btn:hover {
+        transform: translateX(2px) translateY(-1px);
+        animation: jitter 220ms steps(2, end) 2;
+      }
+
+      .cursor::after {
+        content: "_";
+        display: inline-block;
+        margin-left: 2px;
+        color: #f59e0b;
+        animation: cursorPulse 1.2s ease-in-out infinite;
+      }
+
+      @keyframes cursorPulse {
+        0%,
+        100% {
+          opacity: 0.35;
+          transform: translateY(0);
+          text-shadow: 0 0 0 rgba(16, 185, 129, 0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-1px);
+          text-shadow: 0 0 8px rgba(16, 185, 129, 0.65);
+        }
+      }
+
+      .nav-scrolled {
+        background: rgba(2, 6, 23, 0.75);
+        border-bottom-color: rgba(190, 24, 93, 0.34);
+      }
+
+      .logo-blend {
+        /* Approximate white-background removal by blending white into dark UI. */
+        mix-blend-mode: multiply;
+        filter: contrast(1.08) saturate(1.15) brightness(1.1);
+      }
+
+      .lead-photo {
+        filter: grayscale(1) contrast(1.05);
+        mix-blend-mode: multiply;
+      }
+
+      .leader-photo-wrap {
+        position: relative;
+      }
+
+      .leader-photo-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          135deg,
+          rgba(190, 24, 93, 0.2),
+          rgba(34, 197, 94, 0.14)
+        );
+      }
+    </style>
+  </head>
+
+  <body class="text-slate-200 antialiased">
+    <div
+      class="pointer-events-none fixed inset-0 z-0 opacity-20 [background-image:repeating-linear-gradient(0deg,rgba(148,163,184,0.08)_0px,rgba(148,163,184,0.08)_1px,transparent_1px,transparent_38px),repeating-linear-gradient(90deg,rgba(148,163,184,0.08)_0px,rgba(148,163,184,0.08)_1px,transparent_1px,transparent_38px)]"
+    ></div>
+    <div
+      class="pointer-events-none fixed inset-0 z-30 opacity-30 [background-image:repeating-linear-gradient(to_bottom,rgba(255,255,255,0.06),rgba(255,255,255,0.06)_1px,transparent_2px,transparent_4px)]"
+    ></div>
+    <header
+      id="top-nav"
+      class="fixed inset-x-0 top-0 z-40 border-b border-transparent transition-all duration-300"
+    >
+      <nav
+        class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 backdrop-blur-md md:px-8"
+        aria-label="Main Navigation"
+      >
+        <a href="#home" class="flex items-center gap-3">
+          <img
+            src="./assets/logo.png"
+            alt="Computer Society of Kimathi logo"
+            class="logo-blend h-8 w-auto sm:h-9"
+          />
+        </a>
+
+        <button
+          id="menu-toggle"
+          class="inline-flex items-center justify-center border border-rose-500/40 bg-slate-900/60 p-2 text-rose-300 shadow-cyan md:hidden"
+          aria-label="Toggle menu"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <span class="sr-only">Open menu</span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path stroke-linecap="square" d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        </button>
+
+        <ul class="hidden items-center gap-6 text-sm md:flex">
+          <li><a class="hover:text-rose-300" href="#about">About</a></li>
+          <li><a class="hover:text-rose-300" href="#events">Events</a></li>
+          <li>
+            <a class="hover:text-rose-300" href="#leadership">Leadership</a>
+          </li>
+          <li>
+            <a class="hover:text-rose-300" href="#membership">Membership</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div
+        id="mobile-menu"
+        class="hidden border-b border-rose-500/20 bg-slate-950/95 px-4 py-4 backdrop-blur-md md:hidden"
+      >
+        <ul class="space-y-3 font-monohead text-sm text-rose-100">
+          <li>
+            <a href="#about" class="block border border-rose-500/30 px-3 py-2"
+              >About</a
+            >
+          </li>
+          <li>
+            <a href="#events" class="block border border-rose-500/30 px-3 py-2"
+              >Events</a
+            >
+          </li>
+          <li>
+            <a
+              href="#leadership"
+              class="block border border-rose-500/30 px-3 py-2"
+              >Leadership</a
+            >
+          </li>
+          <li>
+            <a
+              href="#membership"
+              class="block border border-rose-500/30 px-3 py-2"
+              >Membership</a
+            >
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <main id="home" class="relative z-10">
+      <section
+        id="system-stats"
+        class="mx-auto hidden w-full max-w-7xl px-4 pt-24 md:block md:px-8"
+      >
+        <div
+          class="grid gap-3 border border-rose-500/30 bg-slate-900/45 p-4 shadow-neon sm:grid-cols-3"
+        >
+          <div class="border border-rose-500/35 bg-black/40 p-3">
+            <p class="text-[10px] uppercase tracking-[0.22em] text-rose-300">
+              ACTIVE_MEMBERS
+            </p>
+            <p
+              class="mt-2 font-monohead text-xl text-slate-100 neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]"
+            >
+              127
+            </p>
+          </div>
+          <div class="border border-green-500/35 bg-black/40 p-3">
+            <p class="text-[10px] uppercase tracking-[0.22em] text-green-300">
+              UPCOMING_EVENTS
+            </p>
+            <p
+              class="mt-2 font-monohead text-xl text-slate-100 neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]"
+            >
+              08
+            </p>
+          </div>
+          <div class="border border-amber-500/35 bg-black/40 p-3">
+            <p class="text-[10px] uppercase tracking-[0.22em] text-amber-300">
+              TECH_STACKS
+            </p>
+            <p
+              class="mt-2 font-monohead text-xl text-slate-100 neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)]"
+            >
+              12
+            </p>
+          </div>
+        </div>
+      </section>
+      <section
+        class="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-7xl items-start px-4 pt-24 md:min-h-screen md:items-center md:px-8 md:pt-12"
+      >
+        <div class="max-w-3xl space-y-4 sm:space-y-6">
+          <p
+            class="font-monohead text-xs uppercase tracking-[0.35em] text-amber-300"
+          >
+            Computer Society of Kimathi
+          </p>
+          <h1
+            class="neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] font-monohead text-4xl font-bold leading-tight text-slate-100 sm:text-6xl"
+          >
+            Build The Future.
+            <span class="block text-rose-400 cursor">Hack The Present</span>
+          </h1>
+          <p class="max-w-xl text-sm text-slate-300 sm:text-base">
+            We are an academic-technology club founded in 2012 that has a
+            mission of cultivating a tech structure through meetups, talks,
+            training, hackathons and social activities for its members.
+          </p>
+          <p class="max-w-xl text-sm text-slate-300 sm:text-base">
+            The club membership is open for students and staff within the
+            university. We aim to create awareness, promote growth of computer
+            knowledge and entrepreneurship and nurture technological and
+            programming talent.
+          </p>
+          <div class="flex flex-wrap gap-3">
+            <a
+              href="#membership"
+              data-text="JOIN CSoK"
+              class="primary-cta jitter-btn neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] glitch-hover [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)] border border-green-500/70 bg-green-500/10 px-5 py-2 font-monohead text-sm uppercase tracking-wider text-green-300 shadow-neon transition-all"
+            >
+              JOIN CSoK
+            </a>
+            <a
+              href="#events"
+              data-text="VIEW EVENTS"
+              class="primary-cta jitter-btn neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] glitch-hover border border-rose-500/60 bg-rose-500/10 px-5 py-2 font-monohead text-sm uppercase tracking-wider text-rose-300 shadow-cyan transition-all"
+            >
+              VIEW EVENTS
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="mx-auto w-full max-w-7xl px-4 py-20 md:px-8">
+        <div class="grid gap-8 md:grid-cols-3">
+          <div class="md:col-span-1">
+            <h2
+              class="neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] font-monohead text-2xl font-bold text-amber-300"
+            >
+              About CSoK
+            </h2>
+          </div>
+          <div
+            class="space-y-4 border border-rose-500/25 bg-slate-900/50 p-6 shadow-neon md:col-span-2"
+          >
+            <p class="text-slate-300">
+              CSoK connects driven developers, designers, and problem-solvers
+              from Dedan Kimathi University to collaborate on real projects and
+              technical growth.
+            </p>
+            <p class="text-slate-400">
+              We host workshops, build nights, hackathons, and mentorship tracks
+              that move members from curiosity to real-world impact.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="events" class="mx-auto w-full max-w-7xl px-4 py-20 md:px-8">
+        <div class="mb-8 flex items-end justify-between">
+          <h2
+            class="neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] font-monohead text-2xl font-bold text-green-300"
+          >
+            Upcoming Events
+          </h2>
+          <a
+            href="#"
+            class="text-xs uppercase tracking-wider text-rose-300 hover:text-rose-200"
+            >See all</a
+          >
+        </div>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <article
+            class="group h-full flex flex-col [clip-path:polygon(0_0,100%_0,100%_80%,90%_100%,0_100%)] border border-rose-500/30 bg-slate-900/50 p-5 shadow-neon transition hover:-translate-y-1 hover:border-rose-300/70"
+          >
+            <p class="text-xs uppercase tracking-[0.2em] text-rose-300">
+              MONDAY
+            </p>
+            <h3 class="mt-3 font-monohead text-lg text-slate-100">
+              Placeholder Event
+            </h3>
+            <p class="mt-2 text-sm text-slate-400">
+              Kickoff session for the week.
+            </p>
+            <button
+              class="mt-4 lg:mt-auto border border-rose-500/60 px-3 py-2 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300 open-event-modal jitter-btn transition-all"
+              data-day="Monday"
+              data-title="Placeholder Event"
+              data-details="Placeholder details: Monday kickoff session agenda, venue, and participation requirements will be added here."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="group h-full flex flex-col [clip-path:polygon(0_0,100%_0,100%_80%,90%_100%,0_100%)] border border-green-500/30 bg-slate-900/50 p-5 shadow-neon transition hover:-translate-y-1 hover:border-green-300/70"
+          >
+            <p class="text-xs uppercase tracking-[0.2em] text-green-300">
+              TUESDAY
+            </p>
+            <h3 class="mt-3 font-monohead text-lg text-slate-100">
+              Another Placeholder Event
+            </h3>
+            <p class="mt-2 text-sm text-slate-400">
+              Second weekly activity slot.
+            </p>
+            <button
+              class="mt-4 lg:mt-auto border border-green-500/60 px-3 py-2 text-xs uppercase tracking-wider text-green-200 transition hover:border-green-300 open-event-modal jitter-btn transition-all"
+              data-day="Tuesday"
+              data-title="Another Placeholder Event"
+              data-details="Placeholder details: Tuesday event timeline, target members, and key outcomes will be listed here."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="group h-full flex flex-col [clip-path:polygon(0_0,100%_0,100%_80%,90%_100%,0_100%)] border border-amber-500/30 bg-slate-900/50 p-5 shadow-neon transition hover:-translate-y-1 hover:border-amber-300/70 sm:col-span-2 lg:col-span-1"
+          >
+            <p class="text-xs uppercase tracking-[0.2em] text-amber-300">
+              WEDNESDAY
+            </p>
+            <h3 class="mt-3 font-monohead text-lg text-slate-100">
+              Placeholder Event
+            </h3>
+            <p class="mt-2 text-sm text-slate-400">
+              Mid-week technical meetup.
+            </p>
+            <button
+              class="mt-4 lg:mt-auto border border-amber-500/60 px-3 py-2 text-xs uppercase tracking-wider text-amber-200 transition hover:border-amber-300 open-event-modal jitter-btn transition-all"
+              data-day="Wednesday"
+              data-title="Placeholder Event"
+              data-details="Placeholder details: Wednesday meetup content, facilitators, and practical tasks will be shared here."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="group h-full flex flex-col [clip-path:polygon(0_0,100%_0,100%_80%,90%_100%,0_100%)] border border-rose-500/30 bg-slate-900/50 p-5 shadow-neon transition hover:-translate-y-1 hover:border-rose-300/70"
+          >
+            <p class="text-xs uppercase tracking-[0.2em] text-rose-300">
+              THURSDAY
+            </p>
+            <h3 class="mt-3 font-monohead text-lg text-slate-100">
+              Placeholder Event
+            </h3>
+            <p class="mt-2 text-sm text-slate-400">
+              Community or project-focused session.
+            </p>
+            <button
+              class="mt-4 lg:mt-auto border border-rose-500/60 px-3 py-2 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300 open-event-modal jitter-btn transition-all"
+              data-day="Thursday"
+              data-title="Placeholder Event"
+              data-details="Placeholder details: Thursday session track, collaboration format, and expected prep will appear here."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="group h-full flex flex-col [clip-path:polygon(0_0,100%_0,100%_80%,90%_100%,0_100%)] border border-green-500/30 bg-slate-900/50 p-5 shadow-neon transition hover:-translate-y-1 hover:border-green-300/70"
+          >
+            <p class="text-xs uppercase tracking-[0.2em] text-green-300">
+              FRIDAY
+            </p>
+            <h3 class="mt-3 font-monohead text-lg text-slate-100">
+              Last Weekly Cadence Event
+            </h3>
+            <p class="mt-2 text-sm text-slate-400">
+              Final event slot of the weekly cadence.
+            </p>
+            <button
+              class="mt-4 lg:mt-auto border border-green-500/60 px-3 py-2 text-xs uppercase tracking-wider text-green-200 transition hover:border-green-300 open-event-modal jitter-btn transition-all"
+              data-day="Friday"
+              data-title="Last Weekly Cadence Event"
+              data-details="Placeholder details: Friday wrap-up event plan, demos, and closing activities will be documented here."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="group h-full flex flex-col [clip-path:polygon(0_0,100%_0,100%_80%,90%_100%,0_100%)] border border-amber-500/30 bg-slate-900/50 p-5 shadow-neon transition hover:-translate-y-1 hover:border-amber-300/70 sm:col-span-2 lg:col-span-2"
+          >
+            <p class="text-xs uppercase tracking-[0.2em] text-amber-300">
+              LAST SATURDAY
+            </p>
+            <h3 class="mt-3 font-monohead text-lg text-slate-100">
+              Showcase Saturday
+            </h3>
+            <p class="mt-2 text-sm text-slate-400">
+              Held on the last Saturday, dedicated to demos, showcases, and
+              project feedback.
+            </p>
+            <button
+              class="mt-4 lg:mt-auto border border-amber-500/60 px-3 py-2 text-xs uppercase tracking-wider text-amber-200 transition hover:border-amber-300 open-event-modal jitter-btn transition-all"
+              data-day="Last Saturday"
+              data-title="Showcase Saturday"
+              data-details="Placeholder details: Showcase Saturday lineup, demo order, judges/mentors, and participation guide will be added here."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="group h-full flex flex-col [clip-path:polygon(0_0,100%_0,100%_80%,90%_100%,0_100%)] border border-rose-500/30 bg-slate-900/50 p-5 shadow-neon transition hover:-translate-y-1 hover:border-rose-300/70 sm:col-span-2 lg:col-span-1"
+          >
+            <p class="text-xs uppercase tracking-[0.2em] text-rose-300">
+              SPORADIC
+            </p>
+            <h3 class="mt-3 font-monohead text-lg text-slate-100">
+              Professional's Take + Other Special Events
+            </h3>
+            <p class="mt-2 text-sm text-slate-400">
+              \"Professional's Take\" happens sporadically, together with guest
+              talks and other occasional events.
+            </p>
+            <button
+              class="mt-4 lg:mt-auto border border-rose-500/60 px-3 py-2 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300 open-event-modal jitter-btn transition-all"
+              data-day="Sporadic"
+              data-title="Professional's Take + Other Special Events"
+              data-details="Placeholder details: sporadic event announcements, guest profiles, and scheduling notes will be maintained here."
+            >
+              More Info
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <section
+        id="leadership"
+        class="mx-auto w-full max-w-7xl px-4 py-20 md:px-8"
+      >
+        <h2
+          class="mb-8 neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] font-monohead text-2xl font-bold text-rose-300"
+        >
+          Leadership
+        </h2>
+        <div class="mb-5 flex justify-center">
+          <article
+            class="h-full w-full max-w-sm flex flex-col border border-amber-500/30 bg-slate-900/45 p-4 shadow-neon"
+          >
+            <div
+              class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden"
+            >
+              <img
+                src="./assets/leader-placeholder.svg"
+                alt="Leader photo placeholder"
+                class="lead-photo h-full w-full object-cover"
+              />
+            </div>
+            <h3 class="mt-4 font-monohead text-base text-slate-100">
+              Anthony Orenge
+            </h3>
+            <p class="mt-1 text-sm text-amber-300">Founder</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200"
+                >Vision</span
+              >
+              <span
+                class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200"
+                >Community</span
+              >
+              <span
+                class="border border-green-500/40 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-green-200"
+                >Mentorship</span
+              >
+            </div>
+            <button
+              class="mt-4 lg:mt-auto border border-amber-500/60 px-3 py-2 text-xs uppercase tracking-wider text-amber-200 transition hover:border-amber-300 open-lead-modal jitter-btn transition-all"
+              data-name="Anthony Orenge"
+              data-role="Founder"
+              data-bio="Placeholder profile: Mr. Anthony founded CSoK and laid the strategic and community foundations for the society."
+            >
+              More Info
+            </button>
+          </article>
+        </div>
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <article
+            class="h-full flex flex-col border border-rose-500/30 bg-slate-900/45 p-4 shadow-neon"
+          >
+            <div
+              class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden"
+            >
+              <img
+                src="./assets/leader-placeholder.svg"
+                alt="Leader photo placeholder"
+                class="lead-photo h-full w-full object-cover"
+              />
+            </div>
+            <h3 class="mt-4 font-monohead text-base text-slate-100">
+              Ruth Matanu
+            </h3>
+            <p class="mt-1 text-sm text-rose-300">President</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200"
+                >Strategy</span
+              >
+              <span
+                class="border border-green-500/40 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-green-200"
+                >Leadership</span
+              >
+              <span
+                class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200"
+                >Operations</span
+              >
+            </div>
+            <button
+              class="mt-4 lg:mt-auto border border-rose-500/60 px-3 py-2 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300 open-lead-modal jitter-btn transition-all"
+              data-name="Ruth Matanu"
+              data-role="President"
+              data-bio="Placeholder profile: Ruth oversees CSoK strategy, coordination, and long-term direction for the society."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="h-full flex flex-col border border-green-500/30 bg-slate-900/45 p-4 shadow-neon"
+          >
+            <div
+              class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden"
+            >
+              <img
+                src="./assets/leader-placeholder.svg"
+                alt="Leader photo placeholder"
+                class="lead-photo h-full w-full object-cover"
+              />
+            </div>
+            <h3 class="mt-4 font-monohead text-base text-slate-100">
+              Peter Kariuki
+            </h3>
+            <p class="mt-1 text-sm text-green-300">Vice President</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                class="border border-green-500/40 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-green-200"
+                >Coordination</span
+              >
+              <span
+                class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200"
+                >Programs</span
+              >
+              <span
+                class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200"
+                >Execution</span
+              >
+            </div>
+            <button
+              class="mt-4 lg:mt-auto border border-green-500/60 px-3 py-2 text-xs uppercase tracking-wider text-green-200 transition hover:border-green-300 open-lead-modal jitter-btn transition-all"
+              data-name="Peter Kariuki"
+              data-role="Vice President"
+              data-bio="Placeholder profile: Peter supports executive planning and ensures key programs run smoothly across the semester."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="h-full flex flex-col border border-amber-500/30 bg-slate-900/45 p-4 shadow-neon"
+          >
+            <div
+              class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden"
+            >
+              <img
+                src="./assets/leader-placeholder.svg"
+                alt="Leader photo placeholder"
+                class="lead-photo h-full w-full object-cover"
+              />
+            </div>
+            <h3 class="mt-4 font-monohead text-base text-slate-100">
+              Arnold Mutwiri
+            </h3>
+            <p class="mt-1 text-sm text-amber-300">Secretary</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200"
+                >Documentation</span
+              >
+              <span
+                class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200"
+                >Communication</span
+              >
+              <span
+                class="border border-green-500/40 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-green-200"
+                >Scheduling</span
+              >
+            </div>
+            <button
+              class="mt-4 lg:mt-auto border border-amber-500/60 px-3 py-2 text-xs uppercase tracking-wider text-amber-200 transition hover:border-amber-300 open-lead-modal jitter-btn transition-all"
+              data-name="Arnold Mutwiri"
+              data-role="Secretary"
+              data-bio="Placeholder profile: Arnold manages records, meeting minutes, and internal communication follow-ups."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="h-full flex flex-col border border-rose-500/30 bg-slate-900/45 p-4 shadow-neon"
+          >
+            <div
+              class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden"
+            >
+              <img
+                src="./assets/leader-placeholder.svg"
+                alt="Leader photo placeholder"
+                class="lead-photo h-full w-full object-cover"
+              />
+            </div>
+            <h3 class="mt-4 font-monohead text-base text-slate-100">
+              Isaiah Kibet
+            </h3>
+            <p class="mt-1 text-sm text-rose-300">Events Coordinator</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200"
+                >Event Ops</span
+              >
+              <span
+                class="border border-green-500/40 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-green-200"
+                >Logistics</span
+              >
+              <span
+                class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200"
+                >Coordination</span
+              >
+            </div>
+            <button
+              class="mt-4 lg:mt-auto border border-rose-500/60 px-3 py-2 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300 open-lead-modal jitter-btn transition-all"
+              data-name="Isaiah Kibet"
+              data-role="Membership Coordinator"
+              data-bio="Placeholder profile: Isaiah coordinates events."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="h-full flex flex-col border border-green-500/30 bg-slate-900/45 p-4 shadow-neon"
+          >
+            <div
+              class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden"
+            >
+              <img
+                src="./assets/leader-placeholder.svg"
+                alt="Leader photo placeholder"
+                class="lead-photo h-full w-full object-cover"
+              />
+            </div>
+            <h3 class="mt-4 font-monohead text-base text-slate-100">
+              Adelaide Myra
+            </h3>
+            <p class="mt-1 text-sm text-green-300">Treasurer</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                class="border border-green-500/40 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-green-200"
+                >Budgeting</span
+              >
+              <span
+                class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200"
+                >Finance</span
+              >
+              <span
+                class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200"
+                >Reporting</span
+              >
+            </div>
+            <button
+              class="mt-4 lg:mt-auto border border-green-500/60 px-3 py-2 text-xs uppercase tracking-wider text-green-200 transition hover:border-green-300 open-lead-modal jitter-btn transition-all"
+              data-name="Myra Adelaide"
+              data-role="Treasurer"
+              data-bio="Placeholder profile: Myra handles budgeting, expenditure tracking, and financial transparency for events."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="h-full flex flex-col border border-rose-500/30 bg-slate-900/45 p-4 shadow-neon"
+          >
+            <div
+              class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden"
+            >
+              <img
+                src="./assets/leader-placeholder.svg"
+                alt="Leader photo placeholder"
+                class="lead-photo h-full w-full object-cover"
+              />
+            </div>
+            <h3 class="mt-4 font-monohead text-base text-slate-100">
+              Denis Wanjohi
+            </h3>
+            <p class="mt-1 text-sm text-rose-300">Membership Coordinator</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200"
+                >Onboarding</span
+              >
+              <span
+                class="border border-green-500/40 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-green-200"
+                >Community</span
+              >
+              <span
+                class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200"
+                >Retention</span
+              >
+            </div>
+            <button
+              class="mt-4 lg:mt-auto border border-rose-500/60 px-3 py-2 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300 open-lead-modal jitter-btn transition-all"
+              data-name="Denis Wanjohi"
+              data-role="Membership Coordinator"
+              data-bio="Placeholder profile: Denis drives onboarding, member support, and retention initiatives across cohorts."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="h-full flex flex-col border border-amber-500/30 bg-slate-900/45 p-4 shadow-neon"
+          >
+            <div
+              class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden"
+            >
+              <img
+                src="./assets/leader-placeholder.svg"
+                alt="Leader photo placeholder"
+                class="lead-photo h-full w-full object-cover"
+              />
+            </div>
+            <h3 class="mt-4 font-monohead text-base text-slate-100">
+              Clement Ndathe
+            </h3>
+            <p class="mt-1 text-sm text-amber-300">Content Creator</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200"
+                >Storytelling</span
+              >
+              <span
+                class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200"
+                >Media</span
+              >
+              <span
+                class="border border-green-500/40 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-green-200"
+                >Editing</span
+              >
+            </div>
+            <button
+              class="mt-4 lg:mt-auto border border-amber-500/60 px-3 py-2 text-xs uppercase tracking-wider text-amber-200 transition hover:border-amber-300 open-lead-modal jitter-btn transition-all"
+              data-name="Clement Ndathe"
+              data-role="Content Creator"
+              data-bio="Placeholder profile: Clement leads brand campaigns, outreach, and event visibility strategies."
+            >
+              More Info
+            </button>
+          </article>
+          <article
+            class="h-full flex flex-col border border-green-500/30 bg-slate-900/45 p-4 shadow-neon"
+          >
+            <div
+              class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden"
+            >
+              <img
+                src="./assets/leader-placeholder.svg"
+                alt="Leader photo placeholder"
+                class="lead-photo h-full w-full object-cover"
+              />
+            </div>
+            <h3 class="mt-4 font-monohead text-base text-slate-100">
+              Benedict
+            </h3>
+            <p class="mt-1 text-sm text-green-300">Marketing Lead</p>
+            <div class="mt-3 flex flex-wrap gap-2">
+              <span
+                class="border border-green-500/40 bg-green-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-green-200"
+                >Branding</span
+              >
+              <span
+                class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200"
+                >Outreach</span
+              >
+              <span
+                class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200"
+                >Campaigns</span
+              >
+            </div>
+            <button
+              class="mt-4 lg:mt-auto border border-green-500/60 px-3 py-2 text-xs uppercase tracking-wider text-green-200 transition hover:border-green-300 open-lead-modal jitter-btn transition-all"
+              data-name="Benedict"
+              data-role="Marketing Lead"
+              data-bio="Placeholder profile: Benedict develops media, storytelling assets, and publication content for CSoK."
+            >
+              More Info
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <div
+        id="lead-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 p-4"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="lead-modal-title"
+      >
+        <div
+          class="w-full max-w-lg border border-rose-500/40 bg-slate-950/95 p-6 shadow-cyan"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p
+                id="lead-modal-role"
+                class="text-xs uppercase tracking-[0.2em] text-rose-300"
+              >
+                Role
+              </p>
+              <h3
+                id="lead-modal-title"
+                class="mt-2 font-monohead text-2xl text-slate-100"
+              >
+                Leader Name
+              </h3>
+            </div>
+            <button
+              id="close-lead-modal"
+              class="border border-rose-500/60 px-3 py-1 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300"
+            >
+              Close
+            </button>
+          </div>
+          <p
+            id="lead-modal-bio"
+            class="mt-5 text-sm leading-relaxed text-slate-300"
+          >
+            Placeholder profile information.
+          </p>
+        </div>
+      </div>
+
+      <div
+        id="event-modal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 p-4"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="event-modal-title"
+      >
+        <div
+          class="w-full max-w-lg border border-rose-500/40 bg-slate-950/95 p-6 shadow-cyan"
+        >
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p
+                id="event-modal-day"
+                class="text-xs uppercase tracking-[0.2em] text-rose-300"
+              >
+                Day
+              </p>
+              <h3
+                id="event-modal-title"
+                class="mt-2 font-monohead text-2xl text-slate-100"
+              >
+                Event Title
+              </h3>
+            </div>
+            <button
+              id="close-event-modal"
+              class="border border-rose-500/60 px-3 py-1 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300"
+            >
+              Close
+            </button>
+          </div>
+          <p
+            id="event-modal-details"
+            class="mt-5 text-sm leading-relaxed text-slate-300"
+          >
+            Placeholder event information.
+          </p>
+        </div>
+      </div>
+
+      <section
+        id="membership"
+        class="mx-auto w-full max-w-7xl px-4 py-20 md:px-8"
+      >
+        <div
+          class="border border-rose-500/40 bg-slate-900/60 p-7 shadow-cyan sm:p-10"
+        >
+          <p
+            class="font-monohead text-xs uppercase tracking-[0.25em] text-rose-300"
+          >
+            Membership
+          </p>
+          <h2
+            class="neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] mt-3 font-monohead text-3xl font-bold text-slate-100"
+          >
+            Plug Into The Network
+          </h2>
+          <p class="mt-3 max-w-2xl text-sm text-slate-300">
+            Join CSoK to access workshops, project squads, peer mentorship, and
+            a fast-moving developer community.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a
+              href="#join-form"
+              data-text="Join Now"
+              class="primary-cta jitter-btn neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] glitch-hover border border-green-500/70 bg-green-500/10 px-5 py-2 font-monohead text-sm uppercase tracking-wider text-green-300 shadow-neon transition-all"
+            >
+              Join Now
+            </a>
+            <a
+              href="#"
+              class="jitter-btn border border-amber-500/60 bg-slate-900/70 px-5 py-2 font-monohead text-sm uppercase tracking-wider text-amber-300 transition-all hover:border-amber-300"
+            >
+              Contact Team
+            </a>
+          </div>
+        </div>
+      </section>
+      <section
+        id="join-form"
+        class="mx-auto w-full max-w-7xl px-4 pb-24 md:px-8"
+      >
+        <div
+          class="border border-green-500/40 bg-slate-900/60 p-5 shadow-neon sm:p-8"
+        >
+          <p
+            class="font-monohead text-xs uppercase tracking-[0.25em] text-green-300"
+          >
+            New Member Intake
+          </p>
+          <h2
+            class="mt-3 neon-depth drop-shadow-[0_0_5px_rgba(16,185,129,0.5)] font-monohead text-2xl font-bold text-slate-100"
+          >
+            Join The CSoK Grid
+          </h2>
+          <p class="mt-2 text-sm text-slate-300">
+            Complete the form below to apply for membership.
+          </p>
+          <div class="mt-6 border border-rose-500/30 bg-black/30 p-2 sm:p-3">
+            <iframe
+              src="https://docs.google.com/forms/d/e/1FAIpQLSfzlAX38zz0ouHv23BEjps4BRLiMZUmHaDE3U81DfyN2LxYZg/viewform?embedded=true"
+              width="100%"
+              height="1950"
+              frameborder="0"
+              marginheight="0"
+              marginwidth="0"
+              title="CSoK Membership Application Form"
+            >
+              Loading…
+            </iframe>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer
+      class="border-t border-rose-500/20 px-4 py-6 text-center text-xs text-slate-500 md:px-8"
+    >
+      <p>
+        &copy; <span id="year"></span> Computer Society of Kimathi. All rights
+        reserved.
+      </p>
+    </footer>
+
+    <script>
+      const menuToggle = document.getElementById("menu-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const nav = document.getElementById("top-nav");
+      const leadModal = document.getElementById("lead-modal");
+      const leadModalTitle = document.getElementById("lead-modal-title");
+      const leadModalRole = document.getElementById("lead-modal-role");
+      const leadModalBio = document.getElementById("lead-modal-bio");
+      const closeLeadModalBtn = document.getElementById("close-lead-modal");
+      const eventModal = document.getElementById("event-modal");
+      const eventModalTitle = document.getElementById("event-modal-title");
+      const eventModalDay = document.getElementById("event-modal-day");
+      const eventModalDetails = document.getElementById("event-modal-details");
+      const closeEventModalBtn = document.getElementById("close-event-modal");
+
+      menuToggle.addEventListener("click", () => {
+        const isOpen = mobileMenu.classList.toggle("hidden") === false;
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 18) {
+          nav.classList.add("nav-scrolled");
+        } else {
+          nav.classList.remove("nav-scrolled");
+        }
+      });
+
+      document.querySelectorAll("#mobile-menu a").forEach((link) => {
+        link.addEventListener("click", () => {
+          mobileMenu.classList.add("hidden");
+          menuToggle.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      function closeLeadModal() {
+        leadModal.classList.add("hidden");
+        leadModal.classList.remove("flex");
+      }
+
+      function closeEventModal() {
+        eventModal.classList.add("hidden");
+        eventModal.classList.remove("flex");
+      }
+
+      document.querySelectorAll(".open-lead-modal").forEach((button) => {
+        button.addEventListener("click", () => {
+          leadModalTitle.textContent = button.dataset.name || "Leader Name";
+          leadModalRole.textContent = button.dataset.role || "Role";
+          leadModalBio.textContent =
+            button.dataset.bio || "Placeholder profile information.";
+          leadModal.classList.remove("hidden");
+          leadModal.classList.add("flex");
+        });
+      });
+
+      closeLeadModalBtn.addEventListener("click", closeLeadModal);
+      closeEventModalBtn.addEventListener("click", closeEventModal);
+
+      leadModal.addEventListener("click", (event) => {
+        if (event.target === leadModal) {
+          closeLeadModal();
+        }
+      });
+
+      eventModal.addEventListener("click", (event) => {
+        if (event.target === eventModal) {
+          closeEventModal();
+        }
+      });
+
+      document.querySelectorAll(".open-event-modal").forEach((button) => {
+        button.addEventListener("click", () => {
+          eventModalTitle.textContent = button.dataset.title || "Event Title";
+          eventModalDay.textContent = button.dataset.day || "Day";
+          eventModalDetails.textContent =
+            button.dataset.details || "Placeholder event information.";
+          eventModal.classList.remove("hidden");
+          eventModal.classList.add("flex");
+        });
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          if (!leadModal.classList.contains("hidden")) {
+            closeLeadModal();
+          }
+          if (!eventModal.classList.contains("hidden")) {
+            closeEventModal();
+          }
+        }
+      });
+
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
