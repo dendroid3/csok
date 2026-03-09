@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSoK | Vue + Radix UI</title>
+    <meta
+      name="description"
+      content="Computer Society of Kimathi (CSoK) website built with Vue and Radix-style components."
+    />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              monohead: ['"Space Mono"', '"Courier New"', "monospace"],
+            },
+            boxShadow: {
+              neon: "0 0 0 1px rgba(34,197,94,0.4), 0 0 22px rgba(190,24,93,0.24)",
+              rose: "0 0 0 1px rgba(190,24,93,0.52), 0 0 28px rgba(251,191,36,0.22)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        background-color: #020617;
+        background-image:
+          radial-gradient(circle at 12% 18%, rgba(190, 24, 93, 0.18), transparent 36%),
+          radial-gradient(circle at 88% 78%, rgba(34, 197, 94, 0.14), transparent 34%),
+          radial-gradient(circle at 52% 8%, rgba(245, 158, 11, 0.1), transparent 30%),
+          linear-gradient(180deg, #020617 0%, #000 100%);
+      }
+
+      .neon-depth {
+        filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5));
+      }
+
+      .glitch-hover {
+        position: relative;
+        overflow: hidden;
+      }
+
+      .glitch-hover::before,
+      .glitch-hover::after {
+        content: attr(data-text);
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .glitch-hover:hover::before {
+        opacity: 0.65;
+        transform: translate(1px, -1px);
+        color: #e11d48;
+        clip-path: polygon(0 0, 100% 0, 100% 42%, 0 42%);
+      }
+
+      .glitch-hover:hover::after {
+        opacity: 0.65;
+        transform: translate(-1px, 1px);
+        color: #22c55e;
+        clip-path: polygon(0 58%, 100% 58%, 100% 100%, 0 100%);
+      }
+
+      @keyframes jitter {
+        0%,
+        100% {
+          transform: translateX(0) translateY(0);
+        }
+        25% {
+          transform: translateX(1px) translateY(-1px);
+        }
+        50% {
+          transform: translateX(-1px) translateY(0);
+        }
+        75% {
+          transform: translateX(2px) translateY(-1px);
+        }
+      }
+
+      .jitter-btn {
+        transition: all 180ms ease;
+      }
+
+      .jitter-btn:hover {
+        transform: translateX(2px) translateY(-1px);
+        animation: jitter 220ms steps(2, end) 2;
+      }
+
+      .cursor::after {
+        content: "_";
+        display: inline-block;
+        margin-left: 2px;
+        color: #f59e0b;
+        animation: cursorPulse 1.2s ease-in-out infinite;
+      }
+
+      @keyframes cursorPulse {
+        0%,
+        100% {
+          opacity: 0.35;
+          transform: translateY(0);
+          text-shadow: 0 0 0 rgba(16, 185, 129, 0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-1px);
+          text-shadow: 0 0 8px rgba(16, 185, 129, 0.65);
+        }
+      }
+
+      .logo-blend {
+        mix-blend-mode: multiply;
+        filter: contrast(1.08) saturate(1.15) brightness(1.1);
+      }
+
+      .lead-photo {
+        filter: grayscale(1) contrast(1.05);
+        mix-blend-mode: multiply;
+      }
+
+      .leader-photo-wrap {
+        position: relative;
+      }
+
+      .leader-photo-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          135deg,
+          rgba(190, 24, 93, 0.2),
+          rgba(34, 197, 94, 0.14)
+        );
+      }
+    </style>
+  </head>
+
+  <body class="text-slate-200 antialiased">
+    <div class="pointer-events-none fixed inset-0 z-0 opacity-20 [background-image:repeating-linear-gradient(0deg,rgba(148,163,184,0.08)_0px,rgba(148,163,184,0.08)_1px,transparent_1px,transparent_38px),repeating-linear-gradient(90deg,rgba(148,163,184,0.08)_0px,rgba(148,163,184,0.08)_1px,transparent_1px,transparent_38px)]"></div>
+    <div class="pointer-events-none fixed inset-0 z-30 opacity-30 [background-image:repeating-linear-gradient(to_bottom,rgba(255,255,255,0.06),rgba(255,255,255,0.06)_1px,transparent_2px,transparent_4px)]"></div>
+
+    <div id="app"></div>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "vue": "https://esm.sh/vue@3.5.13/dist/vue.esm-browser.js"
+        }
+      }
+    </script>
+    <script type="module">
+      import { createApp, ref } from "vue";
+      import {
+        DialogRoot,
+        DialogTrigger,
+        DialogPortal,
+        DialogOverlay,
+        DialogContent,
+        DialogTitle,
+        DialogDescription,
+        DialogClose,
+      } from "https://esm.sh/reka-ui@2.6.0?external=vue";
+
+      const App = {
+        components: {
+          DialogRoot,
+          DialogTrigger,
+          DialogPortal,
+          DialogOverlay,
+          DialogContent,
+          DialogTitle,
+          DialogDescription,
+          DialogClose,
+        },
+        setup() {
+          const mobileOpen = ref(false);
+          const leaderOpen = ref(false);
+          const eventOpen = ref(false);
+          const year = new Date().getFullYear();
+
+          const selectedLeader = ref({
+            name: "Leader Name",
+            role: "Role",
+            bio: "Placeholder profile information.",
+          });
+
+          const selectedEvent = ref({
+            title: "Event Title",
+            day: "Day",
+            details: "Placeholder event information.",
+          });
+
+          const navLinks = [
+            { label: "About", href: "#about" },
+            { label: "Events", href: "#events" },
+            { label: "Leadership", href: "#leadership" },
+            { label: "Membership", href: "#membership" },
+          ];
+
+          const events = [
+            {
+              day: "MONDAY",
+              title: "Web Development",
+              summary:
+                "Practical web-building sessions covering HTML, Tailwind CSS, and responsive UI implementation.",
+              details:
+                "Hands-on web development sessions focused on building real interfaces with HTML, CSS, and modern frontend practices.",
+              accent: "rose",
+            },
+            {
+              day: "TUESDAY",
+              title: "UI/UX",
+              summary:
+                "Design-focused workshops on user flows, wireframing, interface clarity, and interaction patterns.",
+              details:
+                "UI/UX sessions covering product thinking, layout systems, usability, and prototyping workflows.",
+              accent: "green",
+            },
+            {
+              day: "WEDNESDAY",
+              title: "Casual Hangout",
+              summary:
+                "A relaxed mid-week community meetup for networking, idea sharing, and informal collaboration.",
+              details:
+                "Casual community hangout sessions for peer connections, project updates, and light technical discussions.",
+              accent: "amber",
+            },
+            {
+              day: "THURSDAY",
+              title: "Python for Beginners",
+              summary:
+                "Beginner-friendly Python lessons introducing syntax, control flow, functions, and practical exercises.",
+              details:
+                "Guided Python sessions designed for beginners, with fundamentals, coding drills, and supportive mentorship.",
+              accent: "rose",
+            },
+            {
+              day: "FRIDAY",
+              title: "DSA",
+              summary:
+                "Problem-solving sessions on data structures and algorithms for coding interview and contest skills.",
+              details:
+                "DSA practice sessions covering arrays, strings, linked lists, trees, and algorithmic problem-solving approaches.",
+              accent: "green",
+            },
+          ];
+
+          const founder = {
+            name: "Anthony Orange",
+            role: "Founder",
+            bio: "Anthony founded CSoK and laid the strategic and community foundations for the society.",
+            chips: ["Vision", "Community", "Mentorship"],
+            accent: "amber",
+          };
+
+          const leaders = [
+            {
+              name: "Ruth Matanu",
+              role: "President",
+              bio: "Ruth oversees CSoK strategy, coordination, and long-term direction for the society.",
+              chips: ["Strategy", "Leadership", "Operations"],
+              accent: "rose",
+            },
+            {
+              name: "Peter Kariuki",
+              role: "Vice President",
+              bio: "Peter supports executive planning and ensures key programs run smoothly across the semester.",
+              chips: ["Coordination", "Programs", "Execution"],
+              accent: "green",
+            },
+            {
+              name: "Arnold Mutwiri",
+              role: "Secretary",
+              bio: "Arnold manages records, meeting minutes, and internal communication follow-ups.",
+              chips: ["Documentation", "Communication", "Scheduling"],
+              accent: "amber",
+            },
+          ];
+
+          const openLeader = (leader) => {
+            selectedLeader.value = leader;
+            leaderOpen.value = true;
+          };
+
+          const openEvent = (event) => {
+            selectedEvent.value = event;
+            eventOpen.value = true;
+          };
+
+          const accentClasses = (accent) => {
+            if (accent === "green") {
+              return {
+                card: "border-green-500/30 hover:border-green-300/70",
+                text: "text-green-300",
+                button:
+                  "border-green-500/60 text-green-200 hover:border-green-300",
+              };
+            }
+            if (accent === "amber") {
+              return {
+                card: "border-amber-500/30 hover:border-amber-300/70",
+                text: "text-amber-300",
+                button:
+                  "border-amber-500/60 text-amber-200 hover:border-amber-300",
+              };
+            }
+            return {
+              card: "border-rose-500/30 hover:border-rose-300/70",
+              text: "text-rose-300",
+              button:
+                "border-rose-500/60 text-rose-200 hover:border-rose-300",
+            };
+          };
+
+          return {
+            year,
+            navLinks,
+            events,
+            founder,
+            leaders,
+            mobileOpen,
+            leaderOpen,
+            eventOpen,
+            selectedLeader,
+            selectedEvent,
+            openLeader,
+            openEvent,
+            accentClasses,
+          };
+        },
+        template: `
+          <header class="fixed inset-x-0 top-0 z-40 border-b border-rose-500/20 bg-slate-950/70 backdrop-blur-md">
+            <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 md:px-8" aria-label="Main Navigation">
+              <a href="#home" class="flex items-center gap-3">
+                <img src="./assets/logo.png" alt="Computer Society of Kimathi logo" class="logo-blend h-8 w-auto sm:h-9" />
+              </a>
+
+              <ul class="hidden items-center gap-6 text-sm md:flex">
+                <li v-for="link in navLinks" :key="link.href">
+                  <a :href="link.href" class="hover:text-rose-300">{{ link.label }}</a>
+                </li>
+              </ul>
+
+              <DialogRoot v-model:open="mobileOpen">
+                <DialogTrigger as-child>
+                  <button class="inline-flex items-center justify-center border border-rose-500/40 bg-slate-900/60 p-2 text-rose-300 shadow-rose md:hidden" aria-label="Toggle menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path stroke-linecap="square" d="M3 6h18M3 12h18M3 18h18" />
+                    </svg>
+                  </button>
+                </DialogTrigger>
+                <DialogPortal>
+                  <DialogOverlay class="fixed inset-0 z-50 bg-black/70" />
+                  <DialogContent class="fixed bottom-0 left-0 right-0 z-[60] border-t border-rose-500/30 bg-slate-950 p-5">
+                    <DialogTitle class="font-monohead text-sm uppercase tracking-wider text-rose-300">Menu</DialogTitle>
+                    <ul class="mt-4 space-y-2 text-sm">
+                      <li v-for="link in navLinks" :key="'m-' + link.href">
+                        <a :href="link.href" @click="mobileOpen=false" class="block border border-rose-500/30 px-3 py-2">{{ link.label }}</a>
+                      </li>
+                    </ul>
+                    <DialogClose class="mt-4 border border-rose-500/60 px-3 py-2 text-xs uppercase tracking-wider text-rose-200">Close</DialogClose>
+                  </DialogContent>
+                </DialogPortal>
+              </DialogRoot>
+            </nav>
+          </header>
+
+          <main id="home" class="relative z-10">
+            <section class="mx-auto hidden w-full max-w-7xl px-4 pt-24 md:block md:px-8">
+              <div class="grid gap-3 border border-rose-500/30 bg-slate-900/45 p-4 shadow-neon sm:grid-cols-3">
+                <div class="border border-rose-500/35 bg-black/40 p-3">
+                  <p class="text-[10px] uppercase tracking-[0.22em] text-rose-300">ACTIVE_MEMBERS</p>
+                  <p class="mt-2 font-monohead text-xl text-slate-100 neon-depth">127</p>
+                </div>
+                <div class="border border-green-500/35 bg-black/40 p-3">
+                  <p class="text-[10px] uppercase tracking-[0.22em] text-green-300">UPCOMING_EVENTS</p>
+                  <p class="mt-2 font-monohead text-xl text-slate-100 neon-depth">08</p>
+                </div>
+                <div class="border border-amber-500/35 bg-black/40 p-3">
+                  <p class="text-[10px] uppercase tracking-[0.22em] text-amber-300">TECH_STACKS</p>
+                  <p class="mt-2 font-monohead text-xl text-slate-100 neon-depth">12</p>
+                </div>
+              </div>
+            </section>
+
+            <section class="mx-auto flex min-h-[calc(100svh-4rem)] w-full max-w-7xl items-start px-4 pt-24 md:min-h-screen md:items-center md:px-8 md:pt-12">
+              <div class="max-w-3xl space-y-4 sm:space-y-6">
+                <p class="font-monohead text-xs uppercase tracking-[0.35em] text-amber-300">Computer Society of Kimathi</p>
+                <h1 class="neon-depth font-monohead text-4xl font-bold leading-tight text-slate-100 sm:text-6xl">
+                  Build The Future.
+                  <span class="block text-rose-400 cursor">Hack The Present</span>
+                </h1>
+                <p class="max-w-xl text-sm text-slate-300 sm:text-base">A student-powered collective exploring systems, AI, web, cybersecurity, and hardware with a relentless builder mindset.</p>
+                <div class="flex flex-wrap gap-3">
+                  <a href="#join-form" data-text="Join Now" class="primary-cta jitter-btn neon-depth glitch-hover [clip-path:polygon(0_0,100%_0,96%_100%,0_100%)] border border-green-500/70 bg-green-500/10 px-5 py-2 font-monohead text-sm uppercase tracking-wider text-green-300 shadow-neon transition-all">Join Now</a>
+                  <a href="#events" data-text="View Events" class="primary-cta jitter-btn neon-depth glitch-hover border border-rose-500/60 bg-rose-500/10 px-5 py-2 font-monohead text-sm uppercase tracking-wider text-rose-300 shadow-rose transition-all">View Events</a>
+                </div>
+              </div>
+            </section>
+
+            <section id="about" class="mx-auto w-full max-w-7xl px-4 py-20 md:px-8">
+              <div class="grid gap-8 md:grid-cols-3">
+                <h2 class="neon-depth font-monohead text-2xl font-bold text-amber-300">About CSoK</h2>
+                <div class="space-y-4 border border-rose-500/25 bg-slate-900/50 p-6 shadow-neon md:col-span-2">
+                  <p class="text-slate-300">CSoK connects driven developers, designers, and problem-solvers from Dedan Kimathi University to collaborate on real projects and technical growth.</p>
+                  <p class="text-slate-400">We host workshops, build nights, hackathons, and mentorship tracks that move members from curiosity to real-world impact.</p>
+                </div>
+              </div>
+            </section>
+
+            <section id="events" class="mx-auto w-full max-w-7xl px-4 py-20 md:px-8">
+              <div class="mb-8 flex items-end justify-between">
+                <h2 class="neon-depth font-monohead text-2xl font-bold text-green-300">Upcoming Events</h2>
+              </div>
+              <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <article v-for="event in events" :key="event.day" :class="['group h-full flex flex-col [clip-path:polygon(0_0,100%_0,100%_80%,90%_100%,0_100%)] border bg-slate-900/50 p-5 shadow-neon transition hover:-translate-y-1', accentClasses(event.accent).card]">
+                  <p :class="['text-xs uppercase tracking-[0.2em]', accentClasses(event.accent).text]">{{ event.day }}</p>
+                  <h3 class="mt-3 font-monohead text-lg text-slate-100">{{ event.title }}</h3>
+                  <p class="mt-2 text-sm text-slate-400">{{ event.summary }}</p>
+                  <button :class="['mt-4 lg:mt-auto border px-3 py-2 text-xs uppercase tracking-wider transition jitter-btn transition-all', accentClasses(event.accent).button]" @click="openEvent(event)">More Info</button>
+                </article>
+              </div>
+            </section>
+
+            <section id="leadership" class="mx-auto w-full max-w-7xl px-4 py-20 md:px-8">
+              <h2 class="mb-8 neon-depth font-monohead text-2xl font-bold text-rose-300">Leadership</h2>
+              <div class="mb-5 flex justify-center">
+                <article class="h-full w-full max-w-sm flex flex-col border border-amber-500/30 bg-slate-900/45 p-4 shadow-neon">
+                  <div class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden">
+                    <img src="./assets/leader-placeholder.svg" alt="Leader photo placeholder" class="lead-photo h-full w-full object-cover" />
+                  </div>
+                  <h3 class="mt-4 font-monohead text-base text-slate-100">{{ founder.name }}</h3>
+                  <p class="mt-1 text-sm text-amber-300">{{ founder.role }}</p>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <span v-for="chip in founder.chips" :key="chip" class="border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-amber-200">{{ chip }}</span>
+                  </div>
+                  <button class="mt-4 lg:mt-auto border border-amber-500/60 px-3 py-2 text-xs uppercase tracking-wider text-amber-200 transition hover:border-amber-300 jitter-btn transition-all" @click="openLeader(founder)">More Info</button>
+                </article>
+              </div>
+
+              <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+                <article v-for="leader in leaders" :key="leader.name" :class="['h-full flex flex-col border bg-slate-900/45 p-4 shadow-neon', accentClasses(leader.accent).card]">
+                  <div class="leader-photo-wrap aspect-square border border-slate-500/35 bg-slate-800/70 overflow-hidden">
+                    <img src="./assets/leader-placeholder.svg" alt="Leader photo placeholder" class="lead-photo h-full w-full object-cover" />
+                  </div>
+                  <h3 class="mt-4 font-monohead text-base text-slate-100">{{ leader.name }}</h3>
+                  <p :class="['mt-1 text-sm', accentClasses(leader.accent).text]">{{ leader.role }}</p>
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    <span v-for="chip in leader.chips" :key="chip" class="border border-rose-500/40 bg-rose-500/10 px-2 py-1 text-[10px] uppercase tracking-wider text-rose-200">{{ chip }}</span>
+                  </div>
+                  <button :class="['mt-4 lg:mt-auto border px-3 py-2 text-xs uppercase tracking-wider transition jitter-btn transition-all', accentClasses(leader.accent).button]" @click="openLeader(leader)">More Info</button>
+                </article>
+              </div>
+            </section>
+
+            <section id="membership" class="mx-auto w-full max-w-7xl px-4 py-20 md:px-8">
+              <div class="border border-rose-500/40 bg-slate-900/60 p-7 shadow-rose sm:p-10">
+                <p class="font-monohead text-xs uppercase tracking-[0.25em] text-rose-300">Membership</p>
+                <h2 class="mt-3 neon-depth font-monohead text-3xl font-bold text-slate-100">Plug Into The Network</h2>
+                <p class="mt-3 max-w-2xl text-sm text-slate-300">Join CSoK to access workshops, project squads, peer mentorship, and a fast-moving developer community.</p>
+                <div class="mt-6 flex flex-wrap gap-3">
+                  <a href="#join-form" class="primary-cta jitter-btn neon-depth glitch-hover border border-green-500/70 bg-green-500/10 px-5 py-2 font-monohead text-sm uppercase tracking-wider text-green-300 shadow-neon transition-all">Join Now</a>
+                </div>
+              </div>
+            </section>
+
+            <section id="join-form" class="mx-auto w-full max-w-7xl px-4 pb-24 md:px-8">
+              <div class="border border-green-500/40 bg-slate-900/60 p-5 shadow-neon sm:p-8">
+                <p class="font-monohead text-xs uppercase tracking-[0.25em] text-green-300">New Member Intake</p>
+                <h2 class="mt-3 neon-depth font-monohead text-2xl font-bold text-slate-100">Join The CSoK Grid</h2>
+                <p class="mt-2 text-sm text-slate-300">Complete the form below to apply for membership.</p>
+                <div class="mt-6 border border-rose-500/30 bg-black/30 p-2 sm:p-3">
+                  <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfzlAX38zz0ouHv23BEjps4BRLiMZUmHaDE3U81DfyN2LxYZg/viewform?embedded=true" width="100%" height="1950" frameborder="0" marginheight="0" marginwidth="0" title="CSoK Membership Application Form">Loading…</iframe>
+                </div>
+              </div>
+            </section>
+          </main>
+
+          <footer class="border-t border-rose-500/20 px-4 py-6 text-center text-xs text-slate-500 md:px-8">
+            <p>&copy; {{ year }} Computer Society of Kimathi. All rights reserved.</p>
+          </footer>
+
+          <DialogRoot v-model:open="leaderOpen">
+            <DialogPortal>
+              <DialogOverlay class="fixed inset-0 z-50 bg-black/75" />
+              <DialogContent class="fixed left-1/2 top-1/2 z-[60] w-[92vw] max-w-lg -translate-x-1/2 -translate-y-1/2 border border-rose-500/40 bg-slate-950/95 p-6 shadow-rose">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <DialogDescription class="text-xs uppercase tracking-[0.2em] text-rose-300">{{ selectedLeader.role }}</DialogDescription>
+                    <DialogTitle class="mt-2 font-monohead text-2xl text-slate-100">{{ selectedLeader.name }}</DialogTitle>
+                  </div>
+                  <DialogClose class="border border-rose-500/60 px-3 py-1 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300">Close</DialogClose>
+                </div>
+                <p class="mt-5 text-sm leading-relaxed text-slate-300">{{ selectedLeader.bio }}</p>
+              </DialogContent>
+            </DialogPortal>
+          </DialogRoot>
+
+          <DialogRoot v-model:open="eventOpen">
+            <DialogPortal>
+              <DialogOverlay class="fixed inset-0 z-50 bg-black/75" />
+              <DialogContent class="fixed left-1/2 top-1/2 z-[60] w-[92vw] max-w-lg -translate-x-1/2 -translate-y-1/2 border border-rose-500/40 bg-slate-950/95 p-6 shadow-rose">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <DialogDescription class="text-xs uppercase tracking-[0.2em] text-rose-300">{{ selectedEvent.day }}</DialogDescription>
+                    <DialogTitle class="mt-2 font-monohead text-2xl text-slate-100">{{ selectedEvent.title }}</DialogTitle>
+                  </div>
+                  <DialogClose class="border border-rose-500/60 px-3 py-1 text-xs uppercase tracking-wider text-rose-200 transition hover:border-rose-300">Close</DialogClose>
+                </div>
+                <p class="mt-5 text-sm leading-relaxed text-slate-300">{{ selectedEvent.details }}</p>
+              </DialogContent>
+            </DialogPortal>
+          </DialogRoot>
+        `,
+      };
+
+      const app = createApp(App);
+      app.mount("#app");
+    </script>
+  </body>
+</html>
